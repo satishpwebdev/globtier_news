@@ -35,7 +35,7 @@ console.log("NewsCard", news)
       <div className="lns py-5">
         <h2 className="text-4xl font-robo font-bold">Latest News</h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {news?.length ? news.map((item, index)=>(
       <div className="bg-white p-2">
       <div className="flex flex-col items-center justify-center w-full h-[169px] rounded-md shadow-md card">

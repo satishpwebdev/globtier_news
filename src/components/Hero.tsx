@@ -121,8 +121,8 @@ const Hero: React.FC = () => {
   return (
     <>
       <section className="flex items-center justify-between w-full my-16 ">
-        <div className="flex items-start justify-between w-full gap-6">
-          <div className="hot news flex flex-col flex-1 lg:h-[400px] ">
+        <div className="flex flex-col-reverse lg:flex-row items-start justify-between w-full gap-6">
+          <div className="hot news flex flex-col lg:flex-1 lg:h-[400px] ">
             <h2 className="text-5xl font-robo font-bold pb-2">Hot Topics</h2>
             <div className=" relative images min-w-full min-h-full  rounded-md my-3 shadow-lg">
               {images?.length
