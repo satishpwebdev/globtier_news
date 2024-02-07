@@ -2,20 +2,28 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import weathericon from '../assets/weather.png'
 import sunnyIcon from '../assets/sunny.png'
-import {newsApi} from '../constant/url.ts'
+import {newsApi, weatherApi} from '../constant/url.ts'
 
 
 
 interface NewsItem {
     title: string;
-  urlToImage: string;
+    urlToImage: string;
+}
+
+
+interface WeatherItem {
+  title: string;
+  weather: string;
+  currentConditions: any | null;
 }
 
 const Hero: React.FC = () => {
   const [images, setImages] = useState<NewsItem[] | null>(null);
-  const [active, setActive] = useState<number>(10);
+  const [weather, setWeather] = useState<WeatherItem | null>(null);
+  const [active, setActive] = useState<number>(9);
 
-  // calling the api
+  // calling the news api
   const getNewsData = async () => {
     try {
       const res = await axios.get(
@@ -31,8 +39,23 @@ const Hero: React.FC = () => {
     }
   };
 
+  //calling the weather api 
+  const getWeatherData = async () => {
+    try {
+      const res = await axios.get(
+        `${weatherApi}`
+      );
+      const data = res.data;
+      setWeather(data);
+    } catch (error) {
+      console.error("Error fetching news data:", error);
+    }
+  };
+
+
   useEffect(() => {
     getNewsData();
+    getWeatherData()
   }, []);
 
   const handleNext = () => {
@@ -52,7 +75,24 @@ const Hero: React.FC = () => {
 //     return () => clearTimeout(timer);
 //   }, [active]);
 
-  console.log("nffdb", images);
+console.log("Weather", weather)
+
+//Converting Epoch Time to Actual Day and Date
+
+const [formatData, setFormatDate] = useState("")
+useEffect(() => {
+  const sampleEpochTimestamp = weather?.currentConditions?.datetimeEpoch;
+  const date = new Date(sampleEpochTimestamp * 1000); 
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const formattedDateString = date.toLocaleDateString(undefined, options);
+  setFormatDate(formattedDateString);
+}, [weather]);
+
 
   return (
     <>
@@ -78,7 +118,7 @@ const Hero: React.FC = () => {
             </div>
           </div>
           <div className="weather flex flex-col lg:w-[330px] lg:h-[400px] ">
-            <div className="text-3xl text-start font-robo font-bold text-[#2F80ED]">Wednesday 20 Dec 2021</div>
+            <div className="text-3xl text-start font-robo font-bold text-[#2F80ED]">{formatData}</div>
 
             <div className="flex items-center justify-between w-full rounded-md shadow-custom px-10 mt-12 py-5">
                 <div className="flex-col my-2">
