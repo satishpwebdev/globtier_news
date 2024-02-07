@@ -47,7 +47,7 @@ const Hero: React.FC = () => {
       const EndDate = endDate.toISOString().slice(0, 10);
 
       const res = await axios.get(
-        `${weatherApi}/India,Delhi/${startDate}/${EndDate}?key=4SZ6L9EPQV8GKM5LSSVGNJYYW&contentType=json`
+        `${weatherApi}/India,Delhi/${startDate}/${EndDate}?key=KXRM4SDKWPE5NWJGU549PTCC8&contentType=json`
       );
       const data = res.data;
       setWeather(data);
