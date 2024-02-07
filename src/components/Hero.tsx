@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import weathericon from "../assets/weather.png";
-import sunnyIcon from "../assets/sunny.png";
 import { newsApi, weatherApi } from "../constant/url.ts";
+import { MdOutlineWbSunny } from "react-icons/md";
 
 interface NewsItem {
   title: string;
@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
   // calling the news api
   const getNewsData = async () => {
     try {
-      const res = await axios.get(`${newsApi}`);
+      const res = await axios.get(`${newsApi}/top-headlines?country=in&apiKey=6f4bc9b064a24c8093dd1bedbe9743d1`);
       const data = res.data.articles;
       const newData = data.filter(
         (item: NewsItem) => item.urlToImage !== null && item.urlToImage !== undefined
@@ -108,7 +108,7 @@ const Hero: React.FC = () => {
 
   //epoch day convert
 
-  function epochDyConvert(epochTime: any) {
+  function epochDayConvert(epochTime: any) {
     const sampleEpochTimestamp = epochTime;
     const date = new Date(sampleEpochTimestamp * 1000);
     const options: Intl.DateTimeFormatOptions = {
@@ -120,11 +120,11 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <section className="flex items-center justify-between w-full mt-16">
+      <section className="flex items-center justify-between w-full my-16 ">
         <div className="flex items-start justify-between w-full gap-6">
-          <div className="hot news flex flex-col flex-1 lg:h-[465px] ">
-            <h2 className="text-5xl font-robo font-bold">Hot Topics</h2>
-            <div className=" relative images min-w-full min-h-full  rounded-md my-4 shadow-2xl">
+          <div className="hot news flex flex-col flex-1 lg:h-[400px] ">
+            <h2 className="text-5xl font-robo font-bold pb-2">Hot Topics</h2>
+            <div className=" relative images min-w-full min-h-full  rounded-md my-3 shadow-lg">
               {images?.length
                 ? images.map((item, index) => (
                     <>
@@ -146,10 +146,10 @@ const Hero: React.FC = () => {
                 : ""}
             </div>
           </div>
-          <div className="weather flex flex-col lg:w-[330px] lg:h-[400px] ">
-            <div className="text-3xl text-start font-robo font-bold text-[#2F80ED]">{formatData}</div>
+          <div className="weather flex flex-col lg:w-[290px] lg:h-[400px] ">
+            <div className="text-[1.8rem] text-start whitespace-nowrap font-robo font-bold text-[#2F80ED]">{formatData}</div>
 
-            <div className="flex items-center justify-between w-full rounded-md shadow-custom px-10 mt-12 py-5">
+            <div className="flex items-center justify-between w-full rounded-md shadow-custom px-8 mt-12 py-3">
               <div className="flex-col my-2 gap-2">
                 <h2 className="font-robo text-3xl font-bold">
                   {fahrenheit(weather?.currentConditions?.temp)}&deg;
@@ -161,17 +161,17 @@ const Hero: React.FC = () => {
               </div>
             </div>
             {weather?.days?.slice(1,6).map((det: any) => (
-              <div className="flex items-center justify-between w-full mt-5">
-                <div className="flex items-center justify-between w-1/2 px-2 my-2">
+              <div className="flex items-center justify-between w-full mt-4">
+                <div className="flex items-center justify-between w-1/2 px-2 my-1">
                   <h2 className="text-xl font-robo font-bold text-[#7F7F7F]">
-                    {epochDyConvert(det.datetimeEpoch)}
+                    {epochDayConvert(det.datetimeEpoch)}
                   </h2>
                   <h3>
-                    <img src={sunnyIcon} alt="" />
+                    <MdOutlineWbSunny size={29}></MdOutlineWbSunny>
                   </h3>
                 </div>
                 <div className="flex items-center justify-between w-1/4 ">
-                  <h2 className="text-xl font-robo font-bold">{fahrenheit(det?.tempmax)}&deg;</h2>
+                  <h2 className="text-xl font-robo font-bold">{fahrenheit(det?.temp)}&deg;</h2>
                   <h3 className="text-xl font-robo text-[#7F7F7F] font-bold">
                     {fahrenheit(det?.tempmin)}&deg;
                   </h3>
