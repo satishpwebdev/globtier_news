@@ -1,1 +1,1 @@
-# globtier_news
+# Globtier News Site
