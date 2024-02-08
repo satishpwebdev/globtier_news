@@ -101,7 +101,7 @@ const NewsCards: React.FC = () => {
         ref={newsContainerRef}
         className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-4 gap-2"
       >
-        {visibleNews?.slice(0,8)?.map((item, index) => (
+        {visibleNews?.map((item, index) => (
           <div
             key={index}
             onClick={() => redirectToExternalLink(item?.url)}
