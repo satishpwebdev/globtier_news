@@ -69,7 +69,6 @@ const NewsCards: React.FC = () => {
 
   console.log("NewsCard", visibleNews);
 
-  // Rest of your component code remains unchanged
   function publishDuration(apires: any) {
     const publishDate = new Date(apires);
     const currentDate = new Date();

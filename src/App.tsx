@@ -1,7 +1,8 @@
-import Navbar from "./components/Navbar.tsx";
-import Hero from "./components/Hero.tsx";
-import NewsCards from "./components/NewsCards.tsx";
-import Footer from "./components/Footer.tsx";
+import React from "react";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import NewsCards from "./components/NewsCards";
+import Footer from "./components/Footer";
 function App() {
   return (
     <>
