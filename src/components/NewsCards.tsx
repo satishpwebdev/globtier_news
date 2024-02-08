@@ -44,7 +44,7 @@ const NewsCards: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: "10px",
+      rootMargin: "0px",
       threshold: 1.0,
     });
 
