@@ -12,11 +12,12 @@ const Navbar = () => {
   };
 
   const handleSearchInputChange = (event: any) => {
+    event.preventDefault()
     setSearchValue(event.target.value);
   };
 
   const handleSearchSubmit = () => {
-    console.log("Search Value:", searchValue);
+    // console.log("Search Value:", searchValue);
     history.push(`/?search=${encodeURIComponent(searchValue)}`);
     setSearchValue("");
     setIsSearchExpanded(false);
@@ -26,7 +27,7 @@ const Navbar = () => {
     <>
       <nav className="flex items-center justify-between w-full my-4 py-2 px-6 md:px-16">
         <div className="newsp flex items-center gap-2">
-          <button className="bg-[#121221] px-2 py-1 text-white rounded-md font-semibold font-rale">
+          <button onClick={()=>{ history.push('/')}} className="bg-[#121221] px-2 py-1 text-white rounded-md font-semibold font-rale">
             News
           </button>
           <button className="bg-white px-2 py-1 text-black rounded-md font-semibold font-rale">Portal</button>
@@ -46,6 +47,7 @@ const Navbar = () => {
                 className="outline-none w-3/4 border-2 px-1.5 py-1.5 rounded-md"
               />
               <button
+              type="submit"
                 className="bg-blue-400 px-2 py-1.5 rounded-md mx-2 text-white font-robo"
                 onClick={handleSearchSubmit}
               >

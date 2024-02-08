@@ -25,8 +25,15 @@ const Hero: React.FC = () => {
   const [active, setActive] = useState<number>(9);
 
   const location = useLocation();
+  console.log('Location:', location);
+  
   const searchParams = new URLSearchParams(location.search);
+  console.log('Search Params:', searchParams);
+  
   const searchQuery = searchParams.get('search');
+  console.log('Search Query:', searchQuery);
+
+
   // calling the news api
   const getNewsData = async (searchQuery:any) => {
     try {
