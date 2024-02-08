@@ -27,7 +27,7 @@ const Hero: React.FC = () => {
   const getNewsData = async () => {
     try {
       const res = await axios.get(
-        `${newsApi}/top-headlines?country=in&apiKey=6f4bc9b064a24c8093dd1bedbe9743d1`
+        `${newsApi}/top-headlines?country=us&apiKey=cdc4fe1a4c32457d9317be6efee235b6`
       );
       const data = res.data.articles;
       const newData = data.filter(
@@ -123,10 +123,10 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <section className="flex items-center justify-between w-full my-16 ">
+      <section className="flex items-center justify-between w-full md:my-16 mb-16 ">
         <div className="flex flex-col-reverse lg:flex-row items-start justify-between w-full gap-6">
-          <div className="hot news flex flex-col lg:flex-1 lg:h-[400px] ">
-            <h2 className="text-5xl font-robo font-bold pb-2">Hot Topics</h2>
+          <div className="hot news flex flex-col lg:flex-1 h-[200px] lg:h-[400px] ">
+            <h2 className="md:text-5xl text-3xl font-robo font-bold md:pb-2">Hot Topics</h2>
             <div className=" relative images min-w-full min-h-full  rounded-md my-3 shadow-lg">
               {images?.length
                 ? images.map((item, index) => (
@@ -187,17 +187,29 @@ const Hero: React.FC = () => {
             </div>
           </div>
 
-            <div className="md:hidden weathercard flex items-center justify-center w-full  ">
-              {weather?.days?.slice(1,6)?.map((det: any, index:any) => (
-                <div className={`flex mx-1 flex-col items-center gap-y-2 justify-center w-full rounded-md ${index==0 ? "shadow-md":""} p-1.5 px-2`}>
-                  <h2 className={`font-robo text-sm  font-bold ${index==0 ? "text-blue-400":"text-[#7F7F7F]"} `}>{epochDayConvert(det.datetimeEpoch)}</h2>
-                  <img src={sunny}></img>
-                  <div>
-                    <h2>{fahrenheit(det?.tempmin)}&deg;</h2>
-                  </div>
+          {/* mobile forecast cards  */}
+
+          <div className="md:hidden weathercard flex items-center justify-center w-full  ">
+            {weather?.days?.slice(1, 6)?.map((det: any, index: any) => (
+              <div
+                className={`flex mx-1 flex-col items-center gap-y-2 justify-center w-full rounded-md ${
+                  index == 0 ? "shadow-md" : ""
+                } p-1.5 px-2`}
+              >
+                <h2
+                  className={`font-robo text-sm  font-bold ${
+                    index == 0 ? "text-blue-400" : "text-[#7F7F7F]"
+                  } `}
+                >
+                  {epochDayConvert(det.datetimeEpoch)}
+                </h2>
+                <img src={sunny}></img>
+                <div>
+                  <h2>{fahrenheit(det?.tempmin)}&deg;</h2>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>

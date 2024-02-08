@@ -1,6 +1,6 @@
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
-const Navabar = () => {
+const Navbar = () => {
   return (
     <>
       <nav className="flex items-center justify-between w-full my-4 py-2">
@@ -17,4 +17,4 @@ const Navabar = () => {
   );
 };
 
-export default Navabar;
+export default Navbar;
