@@ -3,6 +3,7 @@ import axios from "axios";
 import weathericon from "../assets/weather.png";
 import { newsApi, weatherApi } from "../constant/url.ts";
 import { MdOutlineWbSunny } from "react-icons/md";
+import sunny from "../assets/sunny.png";
 
 interface NewsItem {
   title: string;
@@ -25,7 +26,9 @@ const Hero: React.FC = () => {
   // calling the news api
   const getNewsData = async () => {
     try {
-      const res = await axios.get(`${newsApi}/top-headlines?country=in&apiKey=6f4bc9b064a24c8093dd1bedbe9743d1`);
+      const res = await axios.get(
+        `${newsApi}/top-headlines?country=in&apiKey=6f4bc9b064a24c8093dd1bedbe9743d1`
+      );
       const data = res.data.articles;
       const newData = data.filter(
         (item: NewsItem) => item.urlToImage !== null && item.urlToImage !== undefined
@@ -136,7 +139,7 @@ const Hero: React.FC = () => {
                         alt={`News Image ${index + 1}`}
                       />
                       <h2
-                        className="absolute blur-5 bottom-10 left-6 text-[36px] font-bold font-robo w-2/3 text-white"
+                        className="absolute blur-5 bottom-10 left-6 md:text-[36px] font-bold font-robo w-2/3 text-white"
                         style={{ display: active === index ? "block" : "none" }}
                       >
                         {item?.title}
@@ -146,8 +149,10 @@ const Hero: React.FC = () => {
                 : ""}
             </div>
           </div>
-          <div className="weather flex flex-col lg:w-[290px] lg:h-[400px] ">
-            <div className="text-[1.8rem] text-start whitespace-nowrap font-robo font-bold text-[#2F80ED]">{formatData}</div>
+          <div className="weather hidden lg:block flex flex-col lg:w-[290px] lg:h-[400px] ">
+            <div className="text-[1.8rem] hidden md:block text-start whitespace-nowrap font-robo font-bold text-[#2F80ED]">
+              {formatData}
+            </div>
 
             <div className="flex items-center justify-between w-full rounded-md shadow-custom px-8 mt-12 py-3">
               <div className="flex-col my-2 gap-2">
@@ -160,25 +165,39 @@ const Hero: React.FC = () => {
                 <img src={weathericon}></img>
               </div>
             </div>
-            {weather?.days?.slice(1,6).map((det: any) => (
-              <div className="flex items-center justify-between w-full mt-4">
-                <div className="flex items-center justify-between w-1/2 px-2 my-1">
-                  <h2 className="text-xl font-robo font-bold text-[#7F7F7F]">
-                    {epochDayConvert(det.datetimeEpoch)}
-                  </h2>
-                  <h3>
-                    <MdOutlineWbSunny size={29}></MdOutlineWbSunny>
-                  </h3>
+            <div className="hidden md:block">
+              {weather?.days?.slice(1, 6).map((det: any) => (
+                <div className="flex items-center justify-between w-full mt-4">
+                  <div className="flex items-center justify-between w-1/2 px-2 my-1">
+                    <h2 className="text-xl font-robo font-bold text-[#7F7F7F]">
+                      {epochDayConvert(det.datetimeEpoch)}
+                    </h2>
+                    <h3>
+                      <MdOutlineWbSunny size={29}></MdOutlineWbSunny>
+                    </h3>
+                  </div>
+                  <div className="flex items-center justify-between w-1/4 ">
+                    <h2 className="text-xl font-robo font-bold">{fahrenheit(det?.temp)}&deg;</h2>
+                    <h3 className="text-xl font-robo text-[#7F7F7F] font-bold">
+                      {fahrenheit(det?.tempmin)}&deg;
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between w-1/4 ">
-                  <h2 className="text-xl font-robo font-bold">{fahrenheit(det?.temp)}&deg;</h2>
-                  <h3 className="text-xl font-robo text-[#7F7F7F] font-bold">
-                    {fahrenheit(det?.tempmin)}&deg;
-                  </h3>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+            <div className="md:hidden weathercard flex items-center justify-center w-full  ">
+              {weather?.days?.slice(1,6)?.map((det: any, index:any) => (
+                <div className={`flex mx-1 flex-col items-center gap-y-2 justify-center w-full rounded-md ${index==0 ? "shadow-md":""} p-1.5 px-2`}>
+                  <h2 className={`font-robo text-sm  font-bold ${index==0 ? "text-blue-400":"text-[#7F7F7F]"} `}>{epochDayConvert(det.datetimeEpoch)}</h2>
+                  <img src={sunny}></img>
+                  <div>
+                    <h2>{fahrenheit(det?.tempmin)}&deg;</h2>
+                  </div>
+                </div>
+              ))}
+            </div>
         </div>
       </section>
     </>

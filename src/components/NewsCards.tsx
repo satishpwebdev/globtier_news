@@ -31,14 +31,14 @@ const NewsCards: React.FC = () => {
 console.log("NewsCard", news)
 
   return (
-    <section className="py-8">
-      <div className="lns py-5">
-        <h2 className="text-4xl font-robo font-bold">Latest News</h2>
+    <section className="md:py-8">
+      <div className="lns md:py-5">
+        <h2 className="text-4xl font-robo font-bold pb-4 md:pb-0">Latest News</h2>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
       {news?.length ? news.map((item, index)=>(
-      <div className="bg-white p-2">
-      <div className="flex flex-col items-center justify-center w-full h-[169px] rounded-md shadow-md card">
+      <div className="bg-white p-1  md:p-2">
+      <div className="flex flex-col items-center justify-center w-full md:h-[169px] rounded-md shadow-md card">
         <img
           src={item?.urlToImage}
           className=" w-full h-full object-fill aspect-[4/4] rounded-md shadow-md"
