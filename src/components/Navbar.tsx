@@ -1,12 +1,12 @@
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
-
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 const Navbar = () => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-
+  // const navigate = useNavigate();
   const handleSearchButtonClick = () => {
     setIsSearchExpanded(!isSearchExpanded);
   };
@@ -16,9 +16,8 @@ const Navbar = () => {
   };
 
   const handleSearchSubmit = () => {
-    // Use the searchValue for further processing (e.g., search API)
     console.log("Search Value:", searchValue);
-    // Reset the search input and collapse the search bar
+    history.push(`/?search=${encodeURIComponent(searchValue)}`);
     setSearchValue("");
     setIsSearchExpanded(false);
   };
@@ -46,7 +45,12 @@ const Navbar = () => {
                 onChange={handleSearchInputChange}
                 className="outline-none w-3/4 border-2 px-1.5 py-1.5 rounded-md"
               />
-              <button className="bg-blue-400 px-2 py-1.5 rounded-md mx-2 text-white font-robo" onClick={handleSearchSubmit}>Search</button>
+              <button
+                className="bg-blue-400 px-2 py-1.5 rounded-md mx-2 text-white font-robo"
+                onClick={handleSearchSubmit}
+              >
+                Search
+              </button>
             </div>
           )}
           <button>

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import weathericon from "../assets/weather.png";
-import { newsApi, weatherApi } from "../constant/url.ts";
+import { newsApi, weatherApi } from "../constant/url";
 import { MdOutlineWbSunny } from "react-icons/md";
 import sunny from "../assets/sunny.png";
+import { useLocation } from 'react-router-dom';
 
 interface NewsItem {
   title: string;
@@ -23,11 +24,14 @@ const Hero: React.FC = () => {
   const [weather, setWeather] = useState<WeatherItem | null>(null);
   const [active, setActive] = useState<number>(9);
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get('search');
   // calling the news api
-  const getNewsData = async () => {
+  const getNewsData = async (searchQuery:any) => {
     try {
       const res = await axios.get(
-        `${newsApi}/top-headlines?country=us&apiKey=cdc4fe1a4c32457d9317be6efee235b6`
+        `${newsApi}/top-headlines?country=${searchQuery ? searchQuery :"in"}&apiKey=cdc4fe1a4c32457d9317be6efee235b6`
       );
       const data = res.data.articles;
       const newData = data.filter(
@@ -60,7 +64,10 @@ const Hero: React.FC = () => {
   };
 
   useEffect(() => {
-    getNewsData();
+    getNewsData(searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
     getWeatherData();
   }, []);
 
