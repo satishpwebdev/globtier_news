@@ -123,7 +123,7 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <section className="flex items-center justify-between w-full md:my-16 mb-16 ">
+      <section className="flex items-center justify-between w-full md:my-16 mb-16 px-6 md:px-16 ">
         <div className="flex flex-col-reverse lg:flex-row items-start justify-between w-full gap-6">
           <div className="hot news flex flex-col lg:flex-1 h-[200px] lg:h-[400px] ">
             <h2 className="md:text-5xl text-3xl font-robo font-bold md:pb-2">Hot Topics</h2>

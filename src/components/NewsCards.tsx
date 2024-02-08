@@ -93,7 +93,7 @@ const NewsCards: React.FC = () => {
   }
 
   return (
-    <section className="md:py-8">
+    <section className="md:py-8 px-6 md:px-16">
       <div className="lns md:py-5">
         <h2 className="md:text-4xl text-2xl font-robo font-bold pb-4 md:pb-0">Latest News</h2>
       </div>
