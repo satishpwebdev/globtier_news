@@ -38,3 +38,12 @@ To start the local development server, run the following command:
 ```bash
 npm run dev
 ```
+
+## Sample Images
+
+![Local Image](./src/assets/webshotglob.png)
+
+
+
+<img src="./src/assets/mobshot.png" alt="Local Image" width="100" height="300">
+
