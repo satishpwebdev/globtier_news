@@ -24,6 +24,14 @@ Clone this repository to your local machine:
 ````bash
 npm install
 ``````
+### Install Tailwind Css:
+````bash
+npm install -D tailwindcss postcss autoprefixer
+```````
+
+```bash
+npx tailwindcss init -p
+``````
 
 ### Running the Application
 To start the local development server, run the following command:
