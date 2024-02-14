@@ -32,8 +32,6 @@ const Hero: React.FC = () => {
   useEffect(() => {
     if (searchValue) {
       getWeatherData(searchValue)
-      // Make your API call here with the search value
-      console.log(`Search value is: ${searchValue}`);
     }
   }, [searchValue]); 
 
