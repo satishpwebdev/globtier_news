@@ -1,0 +1,145 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import weathericon from "../assets/weather.png";
+import { gnewsApi, weatherApi } from "../constant/url";
+import { MdOutlineWbSunny } from "react-icons/md";
+import sunny from "../assets/sunny.png";
+const Hero = () => {
+    const [images, setImages] = useState(null);
+    const [weather, setWeather] = useState(null);
+    const [active, setActive] = useState(0);
+    const query = useQuery();
+    const searchValue = query.get("search");
+    function useQuery() {
+        return new URLSearchParams(window.location.search);
+    }
+    useEffect(() => {
+        if (searchValue) {
+            getWeatherData(searchValue);
+        }
+    }, [searchValue]);
+    // calling the news api
+    const getNewsData = async () => {
+        try {
+            const res = await axios.get(
+            // `${newsApi}/top-headlines?country=${searchQuery ? searchQuery :"in"}&apiKey=cdc4fe1a4c32457d9317be6efee235b6`
+            `${gnewsApi}`);
+            const data = await res.data.articles;
+            const newData = data.filter((item) => item.image !== null && item.image !== undefined);
+            setImages(newData);
+        }
+        catch (error) {
+            console.error("Error fetching news data:", error);
+        }
+    };
+    //calling the weather api
+    const getWeatherData = async (citySearch) => {
+        try {
+            const date = new Date();
+            const startDate = date.toISOString().slice(0, 10);
+            const endDate = new Date(date);
+            endDate.setDate(date.getDate() + 5);
+            const EndDate = endDate.toISOString().slice(0, 10);
+            const res = await axios.get(`${weatherApi}/${citySearch ? citySearch : "Delhi"}/${startDate}/${EndDate}?key=KXRM4SDKWPE5NWJGU549PTCC8&contentType=json`);
+            const data = res.data;
+            setWeather(data);
+        }
+        catch (error) {
+            console.error("Error fetching news data:", error);
+        }
+    };
+    useEffect(() => {
+        getNewsData();
+    }, []);
+    useEffect(() => {
+        getWeatherData("delhi");
+    }, []);
+    const handleNext = () => {
+        let actIndex;
+        if (active === ((images && images.length) || 0) - 1) {
+            actIndex = 0;
+        }
+        else {
+            actIndex = active + 1;
+        }
+        setActive(actIndex);
+    };
+    useEffect(() => {
+        let timer = setTimeout(() => {
+            handleNext();
+        }, 8000);
+        return () => clearTimeout(timer);
+    }, [active]);
+    //Converting Epoch Time to Actual Day and Date
+    const [formatData, setFormatDate] = useState("");
+    function convertEpochTime(epochTime) {
+        const sampleEpochTimestamp = epochTime;
+        const date = new Date(sampleEpochTimestamp * 1000);
+        const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        };
+        const formattedDateString = date.toLocaleDateString(undefined, options);
+        setFormatDate(formattedDateString);
+    }
+    useEffect(() => {
+        convertEpochTime(weather?.currentConditions?.datetimeEpoch);
+    }, [weather]);
+    // fahrenheit to celcius
+    function fahrenheit(fah) {
+        const celsius = Math.round(((fah - 32) * 5) / 9);
+        return celsius;
+    }
+    //epoch day convert
+    function epochDayConvert(epochTime) {
+        const sampleEpochTimestamp = epochTime;
+        const date = new Date(sampleEpochTimestamp * 1000);
+        const options = {
+            weekday: "long"
+        };
+        const formattedDateString = date.toLocaleDateString(undefined, options);
+        return formattedDateString;
+    }
+    return (React.createElement(React.Fragment, null,
+        React.createElement("section", { className: "flex items-center justify-between w-full md:my-16 mb-16 px-6 md:px-16 " },
+            React.createElement("div", { className: "flex flex-col-reverse lg:flex-row items-start justify-between w-full gap-6" },
+                React.createElement("div", { className: "hot news flex flex-col lg:flex-1 h-[200px] lg:h-[400px] " },
+                    React.createElement("h2", { className: "md:text-5xl text-3xl font-robo font-bold md:pb-2" }, "Hot Topics"),
+                    React.createElement("div", { className: " relative images min-w-full min-h-full  rounded-md my-3 shadow-lg" }, images?.length
+                        ? images.map((item, index) => (React.createElement(React.Fragment, null,
+                            React.createElement("img", { key: index, style: { display: active === index ? "block" : "none" }, src: item?.image, className: " w-full h-full object-fill aspect-[4/4] rounded-md shadow-md", alt: `News Image ${index + 1}` }),
+                            React.createElement("h2", { className: "absolute blur-5 bottom-10 left-6 md:text-[36px] font-bold font-robo w-2/3 text-white", style: { display: active === index ? "block" : "none" } }, item?.title))))
+                        : "")),
+                React.createElement("div", { className: "weather hidden lg:block flex flex-col lg:w-[290px] lg:h-[400px] " },
+                    React.createElement("div", { className: "text-[1.8rem] hidden md:block text-start whitespace-nowrap font-robo font-bold text-[#2F80ED]" }, formatData),
+                    React.createElement("div", { className: "flex items-center justify-between w-full rounded-md shadow-custom px-8 mt-12 py-3" },
+                        React.createElement("div", { className: "flex-col my-2 gap-2" },
+                            React.createElement("h2", { className: "font-robo text-3xl font-bold" },
+                                fahrenheit(weather?.currentConditions?.temp),
+                                "\u00B0"),
+                            React.createElement("h2", { className: "font-robo text-lg font-bold" }, weather?.resolvedAddress)),
+                        React.createElement("div", null,
+                            React.createElement("img", { src: weathericon }))),
+                    React.createElement("div", { className: "hidden md:block" }, weather?.days?.slice(1, 6).map((det) => (React.createElement("div", { className: "flex items-center justify-between w-full mt-4" },
+                        React.createElement("div", { className: "flex items-center justify-between w-1/2 px-2 my-1" },
+                            React.createElement("h2", { className: "text-xl font-robo font-bold text-[#7F7F7F]" }, epochDayConvert(det.datetimeEpoch)),
+                            React.createElement("h3", null,
+                                React.createElement(MdOutlineWbSunny, { size: 29 }))),
+                        React.createElement("div", { className: "flex items-center justify-between w-1/4 " },
+                            React.createElement("h2", { className: "text-xl font-robo font-bold" },
+                                fahrenheit(det?.temp),
+                                "\u00B0"),
+                            React.createElement("h3", { className: "text-xl font-robo text-[#7F7F7F] font-bold" },
+                                fahrenheit(det?.tempmin),
+                                "\u00B0"))))))),
+                React.createElement("div", { className: "md:hidden weathercard flex items-center justify-center w-full  " }, weather?.days?.slice(1, 6)?.map((det, index) => (React.createElement("div", { className: `flex mx-1 flex-col items-center gap-y-2 justify-center w-full rounded-md ${index == 0 ? "shadow-md" : ""} p-1.5 px-2` },
+                    React.createElement("h2", { className: `font-robo text-sm  font-bold ${index == 0 ? "text-blue-400" : "text-[#7F7F7F]"} ` }, epochDayConvert(det.datetimeEpoch)),
+                    React.createElement("img", { src: sunny }),
+                    React.createElement("div", null,
+                        React.createElement("h2", null,
+                            fahrenheit(det?.tempmin),
+                            "\u00B0"))))))))));
+};
+export default Hero;
