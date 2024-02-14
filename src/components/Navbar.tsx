@@ -17,7 +17,6 @@ const Navbar = () => {
   };
 
   const handleSearchSubmit = () => {
-    // console.log("Search Value:", searchValue);
     history.push(`/?search=${encodeURIComponent(searchValue)}`);
     setSearchValue("");
     setIsSearchExpanded(false);
