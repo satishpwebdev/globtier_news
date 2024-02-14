@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import weathericon from "../assets/weather.png";
-import { newsApi, weatherApi } from "../constant/url";
+import { gnewsApi, weatherApi } from "../constant/url";
 import { MdOutlineWbSunny } from "react-icons/md";
 import sunny from "../assets/sunny.png";
-import { useLocation } from 'react-router-dom';
 
 interface NewsItem {
   title: string;
-  urlToImage: string;
+  // urlToImage: string;
+  image:string;
 }
 
 interface WeatherItem {
@@ -22,27 +22,32 @@ interface WeatherItem {
 const Hero: React.FC = () => {
   const [images, setImages] = useState<NewsItem[] | null>(null);
   const [weather, setWeather] = useState<WeatherItem | null>(null);
-  const [active, setActive] = useState<number>(9);
+  const [active, setActive] = useState<number>(0);
+  const query = useQuery()
+  const searchValue = query.get("search")
+  function useQuery() {
+    return new URLSearchParams(window.location.search);
+  }
 
-  const location = useLocation();
-  console.log('Location:', location);
-  
-  const searchParams = new URLSearchParams(location.search);
-  console.log('Search Params:', searchParams);
-  
-  const searchQuery = searchParams.get('search');
-  console.log('Search Query:', searchQuery);
+  useEffect(() => {
+    if (searchValue) {
+      getWeatherData(searchValue)
+      // Make your API call here with the search value
+      console.log(`Search value is: ${searchValue}`);
+    }
+  }, [searchValue]); 
 
 
   // calling the news api
-  const getNewsData = async (searchQuery:any) => {
+  const getNewsData = async () => {
     try {
       const res = await axios.get(
-        `${newsApi}/top-headlines?country=${searchQuery ? searchQuery :"in"}&apiKey=cdc4fe1a4c32457d9317be6efee235b6`
+        // `${newsApi}/top-headlines?country=${searchQuery ? searchQuery :"in"}&apiKey=cdc4fe1a4c32457d9317be6efee235b6`
+        `${gnewsApi}`
       );
-      const data = res.data.articles;
+      const data =  await res.data.articles;
       const newData = data.filter(
-        (item: NewsItem) => item.urlToImage !== null && item.urlToImage !== undefined
+        (item: NewsItem) => item.image !== null && item.image !== undefined
       ) as NewsItem[];
       setImages(newData);
     } catch (error) {
@@ -51,7 +56,7 @@ const Hero: React.FC = () => {
   };
 
   //calling the weather api
-  const getWeatherData = async () => {
+  const getWeatherData = async (citySearch:any) => {
     try {
       const date = new Date();
       const startDate = date.toISOString().slice(0, 10);
@@ -61,7 +66,7 @@ const Hero: React.FC = () => {
       const EndDate = endDate.toISOString().slice(0, 10);
 
       const res = await axios.get(
-        `${weatherApi}/India,Delhi/${startDate}/${EndDate}?key=KXRM4SDKWPE5NWJGU549PTCC8&contentType=json`
+        `${weatherApi}/${citySearch ? citySearch :"Delhi"}/${startDate}/${EndDate}?key=KXRM4SDKWPE5NWJGU549PTCC8&contentType=json`
       );
       const data = res.data;
       setWeather(data);
@@ -71,11 +76,11 @@ const Hero: React.FC = () => {
   };
 
   useEffect(() => {
-    getNewsData(searchQuery);
-  }, [searchQuery]);
+    getNewsData();
+  }, []);
 
   useEffect(() => {
-    getWeatherData();
+    getWeatherData("delhi");
   }, []);
 
   const handleNext = () => {
@@ -91,11 +96,10 @@ const Hero: React.FC = () => {
   useEffect(() => {
     let timer = setTimeout(() => {
       handleNext();
-    }, 4000);
+    }, 8000);
     return () => clearTimeout(timer);
   }, [active]);
 
-  console.log("Weather", weather);
 
   //Converting Epoch Time to Actual Day and Date
 
@@ -135,6 +139,7 @@ const Hero: React.FC = () => {
     return formattedDateString;
   }
 
+
   return (
     <>
       <section className="flex items-center justify-between w-full md:my-16 mb-16 px-6 md:px-16 ">
@@ -148,7 +153,7 @@ const Hero: React.FC = () => {
                       <img
                         key={index}
                         style={{ display: active === index ? "block" : "none" }}
-                        src={item?.urlToImage}
+                        src={item?.image}
                         className=" w-full h-full object-fill aspect-[4/4] rounded-md shadow-md"
                         alt={`News Image ${index + 1}`}
                       />
